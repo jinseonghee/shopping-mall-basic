@@ -7,12 +7,13 @@ import { Navbar,Container, Nav } from 'react-bootstrap';
 import data from './data';
 import { Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 import Detail from './routes/Detail';
+import axios from 'axios';
 
 function App() {
 
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
-
+  
   return (
     <div className="App">
        <Navbar bg="dark" variant="dark">
@@ -40,6 +41,7 @@ function App() {
            <div className="Container">
            <div className="row">
            {
+             //shoes라는 state의 개수에 맞게 card component 생성하기 
             shoes.map((a, i) => {
             return(
               <Card shoes={shoes[i]} i={i+1}/>
@@ -48,9 +50,19 @@ function App() {
           }
            </div>
         </div>
+          <button onClick = {() => {
+            axios.get('https://codingapple1.github.io/shop/data2.json').then((result) => {
+              console.log("result.data", result.data);
+              let copy = [...shoes, ...result.data]; //...는 spread 연산자로 괄호를 벗겨주는 역할(concat()사용해도 됨)
+              setShoes(copy);
+            }).catch(() => {
+              console.log('connected fail')
+            })
+          }}>버튼</button>
       </>
-        }>
+  }>
         </Route>
+        {/*버튼 누를시에 데이터를 가져와서 상품 카드 3개 뿌리기*/}
         <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
         <Route path="*" element={<div>없는페이지임</div>}/>
         <Route path="/about" element={ <About/> } >  
@@ -58,7 +70,6 @@ function App() {
         <Route path="location" element={ <div>회사위치</div> } />
       </Route>
       </Routes>
-
       {/* <div className = "main-bg" 
       //style={{backgroundImage: 'url('+ bg +')'}}
       >

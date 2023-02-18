@@ -20,7 +20,7 @@ function Detail(props) {
     let [alert, setAlert] = useState(true);
 
     useEffect(()=>{
-        setTimeout(()=>{ setAlert(false) }, 2000)
+        setTimeout(()=>{ setAlert(false)}, 2000)
       }, [])
     
 
