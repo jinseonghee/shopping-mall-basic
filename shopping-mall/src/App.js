@@ -12,7 +12,7 @@ import axios from 'axios';
 function App() {
 
   let [shoes, setShoes] = useState(data);
-  let navigate = useNavigate();
+  let navigate = useNavigate(); //페이지 이동을 도와줌
   
   return (
     <div className="App">
@@ -44,7 +44,8 @@ function App() {
              //shoes라는 state의 개수에 맞게 card component 생성하기 
             shoes.map((a, i) => {
             return(
-              <Card shoes={shoes[i]} i={i+1}/>
+              <Card shoes={shoes[i]} i={i+1}/> //<자식 컴포넌트 작명={state이름} (작명은 자유롭게 하되 보통은 state이름과 똑같이 하고 {}애 보낼 state이름을 사용)>
+              //자식 컴포넌트에서 props parameter등록 후 props.작명 이런식으로 사용 가능
               )
             })
           }
@@ -54,7 +55,7 @@ function App() {
             axios.get('https://codingapple1.github.io/shop/data2.json').then((result) => {
               console.log("result.data", result.data);
               let copy = [...shoes, ...result.data]; //...는 spread 연산자로 괄호를 벗겨주는 역할(concat()사용해도 됨)
-              setShoes(copy);
+              setShoes(copy); //shoes state가 copy로 대체
             }).catch(() => {
               console.log('connected fail')
             })
@@ -64,7 +65,7 @@ function App() {
         </Route>
         {/*버튼 누를시에 데이터를 가져와서 상품 카드 3개 뿌리기*/}
         <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
-        <Route path="*" element={<div>없는페이지임</div>}/>
+        <Route path="*" element={<div>없는페이지임</div>}/> {/* 404페이지*/}
         <Route path="/about" element={ <About/> } >  
         <Route path="member" element={ <div>멤버들</div> } />
         <Route path="location" element={ <div>회사위치</div> } />
@@ -107,6 +108,7 @@ function App() {
     // </div>
   );
 }
+//nested route를 사용할때 경로안에 경로를 보여주는데, 그 자리에 위치를 지정해 줘야한다, 그 때 사용하는게 outlet임 
 function About(){
   return (
     <div>
@@ -116,6 +118,8 @@ function About(){
   )
 }
 
+//card 컴포넌트 안에서 shoes라는 state를 가져다 사용하고 있는데, 이건 card function(자식 컴포넌트) 안에서 사용하고 있지 않고, 
+//App.js(부모 컴포넌트)안에서 사용하고 있기 때문에, 부모에 있는 shoes state를 가져다 사용하고 싶을 경우 props를 이용해서 사용하면 된다.
 function Card(props) {
   return (
     <div className="col-md-4">

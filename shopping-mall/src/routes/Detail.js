@@ -16,7 +16,7 @@ import {useEffect, useState } from "react";
 function Detail(props) {
 
     let {id} = useParams();
-    let 찾은상품 = props.shoes.find(x => x.id == id);
+    let 찾은상품 = props.shoes.find(x => x.id === id);
     let [alert, setAlert] = useState(true);
 
     useEffect(()=>{
@@ -28,7 +28,7 @@ function Detail(props) {
          
         <div className="container">
         {
-                 alert == true
+                 alert === true
                  ? <div className="alert alert-warning">
                      2초이내 구매시 할인
                    </div>
