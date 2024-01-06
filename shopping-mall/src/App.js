@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 
 import './App.css';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { Navbar,Container, Nav } from 'react-bootstrap';
 //import bg from './img/bg.png';
 import data from './data';
@@ -9,9 +9,12 @@ import { Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 import Detail from './routes/Detail';
 import axios from 'axios';
 
+let context1 = createContext();
 function App() {
+  
 
   let [shoes, setShoes] = useState(data);
+  let [ inventory ] = useState([10, 11, 12]);
   let navigate = useNavigate(); //페이지 이동을 도와줌
   
   return (
@@ -64,8 +67,12 @@ function App() {
   }>
         </Route>
         {/*버튼 누를시에 데이터를 가져와서 상품 카드 3개 뿌리기*/}
-        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
-        <Route path="*" element={<div>없는페이지임</div>}/> {/* 404페이지*/}
+        <Route path="/detail/:id" element={
+          <context1.Provider value={{inventory, shoes}}>
+        <Detail shoes={shoes}/>
+        </context1.Provider>}
+         />
+        {/*<Route path="*" element={<div>없는페이지임</div>}/> {/* 404페이지*/}
         <Route path="/about" element={ <About/> } >  
         <Route path="member" element={ <div>멤버들</div> } />
         <Route path="location" element={ <div>회사위치</div> } />
