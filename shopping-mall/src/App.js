@@ -9,7 +9,7 @@ import { Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 import Detail from './routes/Detail';
 import axios from 'axios';
 
-let context1 = createContext();
+export let context1 = createContext();
 function App() {
   
 
@@ -68,8 +68,8 @@ function App() {
         </Route>
         {/*버튼 누를시에 데이터를 가져와서 상품 카드 3개 뿌리기*/}
         <Route path="/detail/:id" element={
-          <context1.Provider value={{inventory, shoes}}>
-        <Detail shoes={shoes}/>
+          <context1.Provider value={{inventory, shoes}}> {/*value에는 공유를 원하는 state를 작성  */}
+        <Detail shoes={shoes}/>{/*여기 안의 모든 컴포넌트는 props없이 inventory, shoes 사용 가능 */}
         </context1.Provider>}
          />
         {/*<Route path="*" element={<div>없는페이지임</div>}/> {/* 404페이지*/}

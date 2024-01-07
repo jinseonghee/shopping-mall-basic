@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import {useEffect, useState } from "react";
+import {useEffect, useState, useContext } from "react";
 import { Nav } from "react-bootstrap";
+import {context1} from './../App.js'
 //import styled from 'styled-components'
 
 // let Box = styled.div`
@@ -17,6 +18,8 @@ import { Nav } from "react-bootstrap";
 // let NewBtn = styled.button(YellowBtn)
 
 function Detail(props) {
+  
+    let { inventory } = useContext(context1) //보관함 해체해 주는 함수, {} destructuring 함수로 꺼내 쓸 수 있음
 
     let {id} = useParams(); // 유저가 URL 파라미터에 입력한 거 가져오는 hook
     //let 찾은상품 = props.shoes.find((x) => x.id === id); // find로 array 자료 안에서 원하는 항목만 찾아옴 // array자료.find(() => {return 조건식}) 
@@ -47,10 +50,11 @@ function Detail(props) {
                    </div>
                  : null
         }
+        
         <div className="row">
             <div className="col-md-6">
             <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" alt="" />
-            </div>
+            </div> 
             <div className="col-md-6 mt-4"> 
             {/* <h4 className="pt-5">{props.shoes[id].title}</h4> */} {/*useParams를 이용해 사용자가 url에 입력한 id값을 그대로 갖고 옴 */}
             <h4 className="pt-5">{찾은상품.title}</h4>
@@ -99,6 +103,8 @@ function Detail(props) {
 
 function TabContent({tab, shoes}) { //다른 방법 사용
   let [ fade, setFade ] = useState('');
+  let { inventory } = useContext(context1); //detail 뿐만 아니라 그 자식들도 Props 없이 사용 가능
+
   useEffect(() => {
   let a = setTimeout(() => {
     setFade('end')      
@@ -111,7 +117,7 @@ function TabContent({tab, shoes}) { //다른 방법 사용
   return (<div className={`start ${fade}`}> {/*문자 중간에 변수 넣으려면 `문자 ${변수}문자`*/}
     {[<div>
       {/*{shoes[0].title}*/}
-      constent0
+      {inventory}
     </div>,<div>content1</div>,<div>content2</div>
     ][tab]} {/*[tab]에서 왼쪽에 있는 자료형을 꺼내는 구조*/}
   </div>)
