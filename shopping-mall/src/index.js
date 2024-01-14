@@ -4,14 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
+import { Provider } from "react-redux";
+import store from './store.js'
+import { QueryClient, QueryClientProvider} from 'react-query';
 
+const queryclient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <QueryClientProvider client={queryclient}>
   <React.StrictMode>
-    <BrowserRouter>
-    <App />
-    </BrowserRouter>
+      <Provider store={store}>
+      <BrowserRouter>
+      <App /> {/*App 컴포넌트 및 그 외 하위 컴포넌트들도 store.js에 있던 state 전부 사용 가능 */}
+      </BrowserRouter>
+      </Provider>
   </React.StrictMode>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

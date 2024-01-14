@@ -1,25 +1,44 @@
 // eslint-disable-next-line
 
 import './App.css';
-import { createContext, useState } from 'react';
+import { Suspense, createContext, useState, useEffect } from 'react';
 import { Navbar,Container, Nav } from 'react-bootstrap';
 //import bg from './img/bg.png';
 import data from './data';
 import { Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 import Detail from './routes/Detail';
 import axios from 'axios';
+import Cart from './routes/Cart';
+import { useQuery } from 'react-query';
+
+// const Detail = lazy( () => import('./routes/Detail.js') ) //필요할 때 import 해라
+// const Cart = lazy( () => import('./routes/Cart.js') )
 
 export let context1 = createContext();
 function App() {
   
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify([])) //loacalstorage에는 array자료형을 저장할 수 없으므로 json.stringfy사용 
+  }, [])
 
   let [shoes, setShoes] = useState(data);
   let [ inventory ] = useState([10, 11, 12]);
   let navigate = useNavigate(); //페이지 이동을 도와줌
+
+  let result = useQuery('작명', ()=>
+    axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      return a.data
+    })
+  )
+
+  // result.data
+  // result.isLoading
+  // result.error //성공/실패/로딩 쉽게 파악 가능
+  
   
   return (
     <div className="App">
-       <Navbar bg="dark" variant="dark">
+       <Navbar bg="light" variant="light">
         <Container>
           <Navbar.Brand href="#home">ShoeShop</Navbar.Brand>
           <Nav className="me-auto">
@@ -28,12 +47,19 @@ function App() {
             }}>Home</Nav.Link>
             {/*   {navigate(-1) 이렇게 넣어주면 뒤로 가기 처럼 한단계 뒤로 간다} */}
             <Nav.Link onClick={() => {
-              {navigate('/detail')}
+              {navigate('/cart')}
             }}>Cart</Nav.Link>
             {/* <Nav.Link href="#pricing">Pricing</Nav.Link> */}
           </Nav>
+          <Nav className="ms-auto">
+            {/* {result.isLoading ? '로딩중' : result.data.name} */}
+            {result.isLoading && '로딩중'} {/*왼쪽에 있는게 true면 오른쪽 출력 */}
+            {result.error && '에러남'} 
+            {result.data && result.data.name} 
+            </Nav>
         </Container>
       </Navbar>
+      <Suspense fallback={<div>로딩중임</div>}>
       <Routes>
         <Route path="/" element={
            <>
@@ -72,12 +98,15 @@ function App() {
         <Detail shoes={shoes}/>{/*여기 안의 모든 컴포넌트는 props없이 inventory, shoes 사용 가능 */}
         </context1.Provider>}
          />
+         {/*장바구니*/}
+         <Route path="/cart" element={<Cart/>}></Route>
         {/*<Route path="*" element={<div>없는페이지임</div>}/> {/* 404페이지*/}
         <Route path="/about" element={ <About/> } >  
         <Route path="member" element={ <div>멤버들</div> } />
         <Route path="location" element={ <div>회사위치</div> } />
       </Route>
       </Routes>
+      </Suspense>
       {/* <div className = "main-bg" 
       //style={{backgroundImage: 'url('+ bg +')'}}
       >
