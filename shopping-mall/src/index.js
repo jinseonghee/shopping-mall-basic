@@ -15,7 +15,7 @@ root.render(
   <React.StrictMode>
       <Provider store={store}>
       <BrowserRouter>
-      <App /> {/*App 컴포넌트 및 그 외 하위 컴포넌트들도 store.js에 있던 state 전부 사용 가능 */}
+      <App /> {/* App 컴포넌트 및 그 외 하위 컴포넌트들도 store.js에 있던 state 전부 사용 가능 */}
       </BrowserRouter>
       </Provider>
   </React.StrictMode>
